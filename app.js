@@ -1,8 +1,6 @@
 var cartValue = document.getElementById("cart-value");
 var cartButton = document.getElementById("cart");
-
 var addButtons = document.getElementsByClassName("button");
-
 var items = [
   {
     name: "This was our pact",
@@ -120,40 +118,26 @@ function updatePrice() {
   finalCents = totalPriceInCents % 100;
 }
 
-// Whatsapp integration
-var whatsappLink =
-  "https://api.whatsapp.com/send?phone=919000000000&text=Order%20details";
-
-// WhatsApp intergration
-function updateWhatsappLink() {
+// Function to open WhatsApp web with the composed message
+function openWhatsApp(message) {
+  // Format the message to include order details
+  let formattedMessage = "Order Details:\n";
   for (let index = 0; index < items.length; index++) {
-    if (items[index].quantity != 0) {
-      whatsappLink += "%0A" + items[index].name + "%20" + items[index].quantity;
+    if (items[index].quantity !== 0) {
+      formattedMessage += items[index].name + ": " + items[index].quantity + "\n";
     }
   }
-  whatsappLink +=
-    "%0A" + "Total%20Price:%20$" + finalDollars + "%20" + finalCents + "c";
+  formattedMessage += "\nTotal Amount: " + finalDollars + "$ and " + finalCents + " cents";
+
+  // Encode the message for the WhatsApp URL
+  let encodedMessage = encodeURIComponent(formattedMessage);
+
+  // Open WhatsApp web with the composed message
+  window.open("https://web.whatsapp.com/send?text=" + encodedMessage);
 }
 
-cartButton.onclick = () => {
-  updatePrice();
-  // Whatsapp integration
-  updateWhatsappLink();
-  window.open(whatsappLink, "_blank");
-
-
-  for (let index = 0; index < items.length; index++) {
-    if (items[index].quantity != 0) {
-      console.log(
-        "Item name: " +
-          items[index].name +
-          " - Quantity: " +
-          items[index].quantity
-      );
-    }
-  }
-
-  console.log(
-    "The total amount is " + finalDollars + "$ and " + finalCents + " cents"
-  );
-};
+// Add event listener to the button for sending WhatsApp message
+document.getElementById("cart").addEventListener("click", function() {
+  updatePrice(); // Update the total price
+  openWhatsApp(); // Open WhatsApp with the composed message
+});
