@@ -118,26 +118,30 @@ function updatePrice() {
   finalCents = totalPriceInCents % 100;
 }
 
-// Function to open WhatsApp web with the composed message
-function openWhatsApp(message) {
-  // Format the message to include order details
-  let formattedMessage = "Order Details:\n";
+// Function to compose the WhatsApp message with order details and total amount
+function composeWhatsAppMessage() {
+  let message = "Order Details:\n";
   for (let index = 0; index < items.length; index++) {
     if (items[index].quantity !== 0) {
-      formattedMessage += items[index].name + ": " + items[index].quantity + "\n";
+      message += items[index].name + ": " + items[index].quantity + "\n";
     }
   }
-  formattedMessage += "\nTotal Amount: " + finalDollars + "$ and " + finalCents + " cents";
-
-  // Encode the message for the WhatsApp URL
-  let encodedMessage = encodeURIComponent(formattedMessage);
-
-  // Open WhatsApp web with the composed message
-  window.open("https://web.whatsapp.com/send?text=" + encodedMessage);
+  message += "\nTotal Amount: " + finalDollars + "$ and " + finalCents + " cents";
+  return message;
 }
 
-// Add event listener to the button for sending WhatsApp message
-document.getElementById("cart").addEventListener("click", function() {
+// Function to open WhatsApp with the composed message
+function openWhatsApp() {
+  let whatsappMessage = composeWhatsAppMessage();
+  let encodedMessage = encodeURIComponent(whatsappMessage);
+  window.open("https://wa.me/?text=" + encodedMessage);
+}
+
+// Add event listener to the cart button
+cartButton.addEventListener("click", function() {
   updatePrice(); // Update the total price
   openWhatsApp(); // Open WhatsApp with the composed message
 });
+
+
+
