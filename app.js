@@ -134,7 +134,7 @@ function composeWhatsAppMessage() {
 function openWhatsApp() {
   let whatsappMessage = composeWhatsAppMessage();
   let encodedMessage = encodeURIComponent(whatsappMessage);
-  window.open("https://wa.me/?text=" + encodedMessage);
+   window.open("https://api.whatsapp.com/send?phone=919000000000&text=Order%20details" + encodedMessage);
 }
 
 // Add event listener to the cart button
