@@ -118,30 +118,24 @@ function updatePrice() {
   finalCents = totalPriceInCents % 100;
 }
 
-// Function to compose the WhatsApp message with order details and total amount
-function composeWhatsAppMessage() {
-  let message = "Order Details:\n";
+
+// Whatsapp integration
+var redirectToWhatsappLink =
+  "https://api.whatsapp.com/send?phone=919000000000&text=Order%20details";
+
+function viewWhatsappLink() {
   for (let index = 0; index < items.length; index++) {
-    if (items[index].quantity !== 0) {
-      message += items[index].name + ": " + items[index].quantity + "\n";
+    if (items[index].quantity != 0) {
+      redirectToWhatsappLink += "%0A" + items[index].name + "%20" + items[index].quantity;
     }
   }
-  message += "\nTotal Amount: " + finalDollars + "$ and " + finalCents + " cents";
-  return message;
+  redirectToWhatsappLink +=
+    "%0A" + "Total%20Price:%20$" + finalDollars + "%20" + finalCents + "c";
 }
 
-// Function to open WhatsApp with the composed message
-function openWhatsApp() {
-  let whatsappMessage = composeWhatsAppMessage();
-  let encodedMessage = encodeURIComponent(whatsappMessage);
-   window.open("https://api.whatsapp.com/send?phone=919000000000&text=Order%20details" + encodedMessage);
-}
-
-// Add event listener to the cart button
-cartButton.addEventListener("click", function() {
-  updatePrice(); // Update the total price
-  openWhatsApp(); // Open WhatsApp with the composed message
-});
-
-
-
+cartButton.onclick = () => {
+  updatePrice();
+  // Whatsapp integration
+  viewWhatsappLink();
+  window.open(redirectToWhatsappLink, "_blank");
+};
